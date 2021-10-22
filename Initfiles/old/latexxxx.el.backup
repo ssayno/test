@@ -1,0 +1,118 @@
+ 
+;; set latex
+;;;  you should install package as follow
+;; auctex
+;; auto-complete-auctex
+;; cdlatex
+;; latex-preview-pane
+;; reftex
+;; In my option, I think should open the menu-bar-mode in LaTeX-mode
+;; set latex
+(add-hook 'LaTeX-mode-hook 'menu-bar-mode)
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+(setq-default TeX-master nil)
+;; some useful mode
+(add-hook 'LaTeX-mode-hook 'visual-line-mode)
+(add-hook 'LaTeX-mode-hook 'flyspell-mode)
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+
+;; (setq TeX-install-font-lock 'ignore)
+(add-hook 'LaTeX-mode-hook (lambda ()
+    ;;LaTeX 模式下，不打开自动折行
+    (turn-off-auto-fill)
+    ;; 显示行数 init.el启用，这里不启用
+    (linum-mode 0)
+    ;; 打开自动补全
+    (auto-complete-mode 1)
+    ;; 接下来是和编译 TeX 有关的
+    ;; 编译的时候，不在当前窗口中显示编译信息
+    (setq TeX-show-compilation nil)
+    (setq TeX-clean-confirm nil)
+    (setq TeX-save-query nil)
+    ;; 打开预览模式
+))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; get the result of what you see is what you get
+;; (add-hook 'LaTeX-mode-hook 'latex-preview-pane-mode)
+(defun mypreview ()
+  "my key for preview latex"
+  (interactive)
+  (local-set-key (kbd "C-c p") 'latex-preview-pane-mode))
+(add-hook 'LaTeX-mode-hook 'mypreview)
+(setq pdf-latex-command "xelatex")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 配置三个基础个命令 一个用于普通xelatex 一个用于--shell-escape
+;; 其实acutex默认的LaTeX和命令行的LaTeX不一样，acutex的LaTeX本质上是pdflatex
+;; 所以配置或者不配置pdflatex都没有很大的必要， 也可以说是有必要的，自带的没有-8bit,可能会出现
+(add-hook 'LaTeX-mode-hook
+    (lambda ()
+      (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex --synctex=1%(mode)%' %t" TeX-run-TeX nil t))
+      (add-to-list 'TeX-command-list '("XeLaTeX-shell" "%`xelatex --shell-escape --synctex=1 -8bit%(mode)%' %t" TeX-run-TeX nil t))
+      (add-to-list 'TeX-command-list '("pdfLaTeX" "%`pdflatex --synctex=1 -8bit%(mode)%' %t" TeX-run-TeX nil t))
+      (setq TeX-command-default "XeLaTeX")
+      ))
+
+
+;; set RET to C-j to (newline-and-indent), it's useful
+(add-hook 'LaTeX-mode-hook '(lambda ()
+  (local-set-key (kbd "RET") 'newline-and-indent)))
+;; come from https://www.emacswiki.org/emacs/AutoIndentation
+;; set okular
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;;;;;;;;;;;;;;;        LaTeX         ;;;;;;;;;;;;;;;;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ##### Don't forget to configure
+;; ##### Okular to use emacs in
+;; ##### "Configuration/Configure Okular/Editor"
+;; ##### => Editor => Emacsclient. (you should see
+;; ##### emacsclient -a emacs --no-wait +%l %f
+;; ##### in the field "Command".
+;; ##### Always ask for the master file
+;; ##### when creating a new TeX file.
+;; ##### Enable synctex correlation. From Okular just press
+;; ##### Shift + Left click to go to the good line.
+(setq TeX-source-correlate-mode t
+      TeX-source-correlate-start-server t)
+
+;; ### Set Okular as the default PDF viewer.
+(eval-after-load "tex"
+  '(setcar (cdr (assoc 'output-pdf TeX-view-program-selection)) "Okular"))
+
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;;;;;;;;;;;;;;;; reflatex and cdlatex ;;;;;;;;;;;;;;;;;
+(require 'reftex)
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+(setq reftex-plug-into-AUCTeX t)
+(setq reftex-enable-partial-scans t)
+(setq reftex-save-parse-info t)
+(setq reftex-use-multiple-selection-buffers t)
+(autoload 'reftex-mode "reftex"
+  "RefTeX Minor Mode" t)
+(autoload 'turn-on-reftex "reftex"
+  "RefTeX Minor Mode" nil)
+(autoload 'reftex-citation "reftex-cite"
+  "Make citation" nil)
+(autoload 'reftex-index-phrase-mode
+  "reftex-index" "Phrase mode" t)
+(add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)   ; with AUCTeX LaTeX mode
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; set section and its config
+(setq LaTeX-section-hook
+  '(LaTeX-section-heading
+  LaTeX-section-title
+  ;;LaTeX-section-toc  ;; some people don't want to need.
+  LaTeX-section-section
+  ;;LaTeX-section-label ;; I also don't want to need this.
+  ))
+;; set amsmath label
+(setq LaTeX-amsmath-label nil)
+;; set default environment
+(setq LaTeX-default-environment "equation")
+;; set default floats 
+(setq LaTeX-float "ht")
+
+;; set default width for tabular* and minipage
+;; not for tabular*, I can use tblr(tabularray package)
+(setq LaTeX-default-width "0.45\\linewidth")
