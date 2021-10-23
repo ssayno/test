@@ -1,3 +1,4 @@
+(require 'use-package-ensure)
 (setq use-package-always-ensure t)
 (require 'package)
 (package-initialize)
@@ -72,7 +73,6 @@
 (global-auto-revert-mode 1)
 
 (use-package rainbow-delimiters
-  :ensure t
   :config
   (add-hook 'LaTeX-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'progn-mode-hook 'rainbow-delimiters-mode)
@@ -80,13 +80,11 @@
   (add-hook 'org-mode-hook 'rainbow-delimiters-mode))
 ;; file directory structure
 (use-package neotree
-  :ensure t
   :init
   (bind-key "<f8>" 'neotree-toggle))
 
 ;; check the syntax
 (use-package flycheck
-  :ensure t
   :init (global-flycheck-mode)
   :config
   (add-hook 'after-init-hook #'global-flycheck-mode)
@@ -99,7 +97,6 @@
                  (window-height   . 0.33))))
 
 (use-package solarized-theme
-  :ensure t
   :config
   (load-theme 'solarized-dark t))
 

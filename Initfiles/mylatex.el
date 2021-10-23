@@ -13,7 +13,6 @@
 (add-to-list 'auto-mode-alist '("\\.tex$" . LaTeX-mode))
 ;; set the shell
 (use-package exec-path-from-shell
-  :ensure t
   :config
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize))
@@ -25,7 +24,6 @@
 (use-package tex
   :ensure auto-complete-auctex)
 (use-package cdlatex
-  :ensure t
   :config
   (require 'cdlatex)
   (setq cdlatex-paired-parens "$[{(")
@@ -77,7 +75,6 @@
   ;; https://github.com/politza/pdf-tools
   
   (use-package pdf-tools
-	:ensure t
 	:config
 	(pdf-loader-install))
   (require 'tex-buf)
