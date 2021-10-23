@@ -75,7 +75,11 @@
 
   ;; 当需要预览的时候，docview过于模糊，安装pdf-tools
   ;; https://github.com/politza/pdf-tools
-  (pdf-loader-install)
+  
+  (use-package pdf-tools
+	:ensure t
+	:config
+	(pdf-loader-install))
   (require 'tex-buf)
   (add-hook 'TeX-after-compilation-finished-functions 'TeX-revert-document-buffer)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
