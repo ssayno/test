@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 ;; 安装(highlight-parentheses-mode ，让圆括号也是可以有
+
 (add-hook 'LaTeX-mode-hook
           '(lambda ()
              (highlight-parentheses-mode)
