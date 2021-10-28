@@ -1,5 +1,5 @@
-(require 'use-package-ensure)
 (setq use-package-always-ensure t)
+(require 'use-package-ensure)
 (require 'package)
 (package-initialize)
 (add-to-list
@@ -27,9 +27,9 @@
         (fullscreen . maximized)))
 (setq-default frame-title-format '("sayno"))
 (column-number-mode 1)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;package-refresh-contents;
 ;; backup and file related
-;; whether generate the file~
+;; whether generate the file~package-refresh-contents
 (setq make-backup-files nil)
 (setq backup-by-copying t)
 (setq create-lockfiles nil)
@@ -45,10 +45,10 @@
 (set-frame-font "DejaVu Sans Mono" t t)
 
 ;; set Enter to function 'newline-and-indent, it is useful.
-(define-key global-map (kbd "RET" ) 'newline-and-indent)
+;; (define-key global-map (kbd "RET" ) 'newline-and-indent)
 (set-default 'tab-always-indent 'complete)
 ;; no mixed tab space
-
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;;
 (scroll-bar-mode -1)
@@ -61,7 +61,6 @@
 (set-default-coding-systems 'utf-8-unix)
 
 
-
 ;; add "open recent" in your "File" in your menu.
 (require 'recentf)
 (recentf-mode 1)
@@ -72,6 +71,35 @@
 (electric-pair-mode 1)
 (global-auto-revert-mode 1)
 
+(use-package yasnippet
+  :config
+  (yas-global-mode 1))
+
+(use-package counsel)
+(use-package swiper
+  :config
+  (ivy-mode)
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t)
+  ;; enable this if you want `swiper' to use it
+  ;; (setq search-default-mode #'char-fold-to-regexp)
+  (global-set-key "\C-s" 'swiper)
+  (global-set-key (kbd "C-c C-r") 'ivy-resume)
+  (global-set-key (kbd "<f6>") 'ivy-resume)
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+  (global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
+  (global-set-key (kbd "<f1> l") 'counsel-find-library)
+  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+  (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+  (global-set-key (kbd "C-c g") 'counsel-git)
+  (global-set-key (kbd "C-c j") 'counsel-git-grep)
+  (global-set-key (kbd "C-c k") 'counsel-ag)
+  (global-set-key (kbd "C-x l") 'counsel-locate)
+  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 
 
 (use-package rainbow-delimiters
@@ -114,8 +142,8 @@
 (global-set-key "\C-co" 'switch-to-minibuffer) ;; Bind to `C-c o'
 
 ;; can change the alpha
-(set-frame-parameter (selected-frame) 'alpha '(100 . 100))
-(add-to-list 'default-frame-alist '(alpha . (100 . 100)))
+(set-frame-parameter (selected-frame) 'alpha '(85 . 50))
+(add-to-list 'default-frame-alist '(alpha . (85 . 50)))
 (defun toggle-transparency ()
   (interactive)
   (let ((alpha (frame-parameter nil 'alpha)))
@@ -126,17 +154,17 @@
                     ;; Also handle undocumented (<active> <inactive>) form.
                     ((numberp (cadr alpha)) (cadr alpha)))
               100)
-        '(85 . 50) '(100 . 100)))))
+        '(85 . 60) '(100 . 100)))))
 (global-set-key (kbd "C-c t") 'toggle-transparency)
 ;; open the 'ido-mode
-(require 'ido)
-(ido-mode 1)
-(setf (nth 2 ido-decorations) "\n")
-(require 'icomplete)
-(icomplete-mode 1)
-(setq icomplete-separator "\n")
-(setq icomplete-hide-common-prefix nil)
-(setq icomplete-in-buffer t)
+;; (require 'ido)
+;; (ido-mode 1)
+;; (setf (nth 2 ido-decorations) "\n")
+;; (require 'icomplete)
+;; (icomplete-mode 1)
+;; (setq icomplete-separator "\n")
+;; (setq icomplete-hide-common-prefix nil)
+;; (setq icomplete-in-buffer t)
 
 ;;; my basic config
 
@@ -195,9 +223,11 @@
    '("#dc322f" "#cb4b16" "#b58900" "#5b7300" "#b3c34d" "#0061a8" "#2aa198" "#d33682" "#6c71c4"))
  '(outline-minor-mode-prefix [(control o)])
  '(package-selected-packages
-   '(use-package solarized-theme rainbow-delimiters pdf-tools neotree markdown-preview-eww markdown-mode magit lispy highlight-parentheses flycheck flex-autopair exec-path-from-shell edit-indirect auto-complete-auctex auctex async))
+   '(yasnippet-snippets use-package solarized-theme rainbow-delimiters pdf-tools neotree markdown-preview-eww markdown-mode magit lispy highlight-parentheses flycheck flex-autopair exec-path-from-shell edit-indirect auto-complete-auctex auctex async))
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
+ '(show-paren-mode t)
+ '(show-paren-style 'mixed)
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
  '(term-default-bg-color "#002b36")
  '(term-default-fg-color "#839496")
@@ -238,4 +268,5 @@
  '(rainbow-delimiters-depth-1-face ((t (:foreground "light steel blue"))))
  '(rainbow-delimiters-depth-2-face ((t (:foreground "OliveDrab2"))))
  '(rainbow-delimiters-depth-3-face ((t (:foreground "red"))))
- '(rainbow-delimiters-depth-4-face ((t (:foreground "navy")))))
+ '(rainbow-delimiters-depth-4-face ((t (:foreground "navy"))))
+ '(show-paren-match ((((class color) (min-colors 89)) (:foreground "#00869b" :background unspecified :weight bold)))))
