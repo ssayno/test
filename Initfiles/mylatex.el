@@ -21,7 +21,6 @@
     (exec-path-from-shell-initialize))
   (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on))
 
-
 (use-package tex
   :ensure auto-complete-auctex)
 (use-package cdlatex
@@ -32,6 +31,22 @@
     (define-key cdlatex-mode-map "_" nil) t)
   (eval-after-load "cdlatex" '(my-after-load-cdlatex))
   (setq TeX-electric-sub-and-superscript t))
+
+(use-package latex-preview-pane
+  :config
+  (defun toggle-preview-mode ()
+	"Use for preview latex."
+	(interactive)
+	(if (bound-and-true-p latex-preview-pane-mode)
+		(latex-preview-pane-mode 0)
+	  (latex-preview-pane-mode 1)))
+  (defun mypreview ()
+	"My key for preview latex."
+	(interactive)
+	(local-set-key (kbd "C-c M-p") 'toggle-preview-mode))
+  (add-hook 'LaTeX-mode-hook 'mypreview)
+  (setq shell-escape-mode "-shell-escape")
+  (setq pdf-latex-command "pdflatex"))
 
 ;; 让垂直拆分
 ;; (setq split-height-threshold nil)
@@ -146,7 +161,7 @@
   (add-hook 'LaTeX-mode-hook 'mytexdoc)
   ;; 由于使用中文较多，使用xetex引擎
   ;; 其实设不设置没啥必要，当你编译的使用会自己给你选好
-  (setq TeX-engine 'xetex)
+  (setq-default TeX-engine 'xetex)
   ;; 使用minted等一些其他宏包的时候，需要额外编译选项
   (setq TeX-command-extra-options "-shell-escape")
   )
@@ -176,28 +191,10 @@
 (global-set-key "\C-x[" 'quoted-brackets)
 
 
-;; preview-latex-pane 被我舍弃掉了，并不是那么好用，等会我设置他的正反搜索再启用
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; use a foolish method to get full screen and preview...mode                     ;;;;;;;;
-;; get the result of what you see is what you get                                 ;;;;;;;;
-;; (defun fullscreen ()                                                           ;;;;;;;;
-;;        (interactive)                                                           ;;;;;;;;
-;;        (x-send-client-message nil 0 nil "_NET_WM_STATE" 32                     ;;;;;;;;
-;;                  '(2 "_NET_WM_STATE_FULLSCREEN" 0)))                           ;;;;;;;;
-;; (defun toggle-some-mode ()                                                     ;;;;;;;;
-;;   (interactive)
-;;   (if (bound-and-true-p latex-preview-pane-mode)
-;;     (progn (fullscreen) (latex-preview-pane-mode 0))
-;;     (progn (fullscreen) (latex-preview-pane-mode 1))))
-;; (defun mypreview ()
-;;   "my key for preview latex"
-;;   (interactive)
-;;   (local-set-key (kbd "C-c p") 'toggle-some-mode))
-;; (add-hook 'LaTeX-mode-hook 'mypreview)
+
+
 ;; 设置预览的编译器
 ;; 给编译选项加上 -shell-escape
-;; (setq shell-escape-mode "-shell-escape")
-;; (setq pdf-latex-command "pdflatex")
+
 (provide 'mylatex)
 ;;; mylatex.el ends here

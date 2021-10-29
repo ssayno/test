@@ -2,12 +2,17 @@
 (require 'use-package-ensure)
 (require 'package)
 (package-initialize)
-(add-to-list
- 'package-archives
- '("melpa" . "https://melpa.org/packages/") t)
+;; (add-to-list
+;;  'package-archives
+;;  '("melpa" . "https://melpa.org/packages/") t)
+(setq package-archives '(("gnu"   . "http://elpa.zilongshanren.com/gnu/")
+                         ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
 ;; 添加额外的路径
 (add-to-list 'load-path "~/.emacs.d/Initfiles/")
 (setq inhibit-startup-screen t)
+
+;;
+(setq load-prefer-newer t)
 
 (if (display-graphic-p)
     (setq initial-frame-alist
@@ -59,7 +64,7 @@
 ;; UTF-8 as default encoding
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8-unix)
-
+(prefer-coding-system 'utf-8-unix)
 
 ;; add "open recent" in your "File" in your menu.
 (require 'recentf)
@@ -71,10 +76,10 @@
 (electric-pair-mode 1)
 (global-auto-revert-mode 1)
 
-(use-package yasnippet
-  :config
-  (yas-global-mode 1))
-
+;; (use-package yasnippet
+;;   :config
+;;   (yas-global-mode 1))
+;; (use-package yasnippet-snippets)
 (use-package counsel)
 (use-package swiper
   :config
@@ -101,6 +106,12 @@
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 
+;; (use-package multiple-cursors
+;;   :bind
+;;   ("C-S-c C-S-c" . mc/edit-lines)
+;;   ("C->" . mc/mark-next-like-this)
+;;   ("C-<" . mc/mark-previous-like-this)
+;;   ("C-c C->" . mc/mark-all-like-this))
 
 (use-package rainbow-delimiters
   :init
@@ -218,17 +229,19 @@
  '(hl-fg-colors
    '("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36"))
  '(hl-paren-colors '("#2aa198" "#b58900" "#268bd2" "#6c71c4" "#859900"))
+ '(latex-preview-pane-multifile-mode 'auctex)
  '(lsp-ui-doc-border "#93a1a1")
  '(nrepl-message-colors
    '("#dc322f" "#cb4b16" "#b58900" "#5b7300" "#b3c34d" "#0061a8" "#2aa198" "#d33682" "#6c71c4"))
  '(outline-minor-mode-prefix [(control o)])
  '(package-selected-packages
-   '(yasnippet-snippets use-package solarized-theme rainbow-delimiters pdf-tools neotree markdown-preview-eww markdown-mode magit lispy highlight-parentheses flycheck flex-autopair exec-path-from-shell edit-indirect auto-complete-auctex auctex async))
+   '(latex-preview-pane yasnippet-snippets use-package solarized-theme rainbow-delimiters pdf-tools neotree markdown-preview-eww markdown-mode magit lispy highlight-parentheses flycheck flex-autopair exec-path-from-shell edit-indirect auto-complete-auctex auctex async))
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(show-paren-mode t)
  '(show-paren-style 'mixed)
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
+ '(synctex-number "1")
  '(term-default-bg-color "#002b36")
  '(term-default-fg-color "#839496")
  '(vc-annotate-background nil)
